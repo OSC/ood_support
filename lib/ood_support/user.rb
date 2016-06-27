@@ -60,20 +60,20 @@ module OodSupport
     # @param another_user [User] user to compare against
     # @return [Boolean] whether user names are same
     def ==(another_user)
-      name == another_user.name
+      id == another_user.id
     end
 
     # Boolean evaluation of object equality
     # @param another_user [User] user to compare against
     # @return [Boolean] whether user names are same
     def eql?(another_user)
-      name == another_user.name
+      self == another_user
     end
 
-    # Generates a hash value for this object from user name
+    # Generates a hash value for this object
     # @return [Fixnum] hash value of object
     def hash
-      name.hash
+      id.hash
     end
 
     # Convert object to string using user name as string value

@@ -33,20 +33,20 @@ module OodSupport
     # @param another_group [Group] group to compare against
     # @return [Boolean] whether group names are same
     def ==(another_group)
-      name == another_group.name
+      id == another_group.id
     end
 
     # Boolean evaluation of object equality
     # @param another_group [Group] group to compare against
     # @return [Boolean] whether group names are same
     def eql?(another_group)
-      name == another_group.name
+      self == another_group
     end
 
-    # Generates a hash value for this object from group name
+    # Generates a hash value for this object
     # @return [Fixnum] hash value of object
     def hash
-      name.hash
+      id.hash
     end
 
     # Convert object to string using group name as string value
