@@ -39,7 +39,7 @@ module OodSupport
     # Determine whether user is part of specified group
     # @param group [Group] group to check
     # @return [Boolean] whether user is in group
-    def has_group?(group)
+    def in_group?(group)
       groups.include? Group.new(group)
     end
 

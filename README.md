@@ -57,7 +57,7 @@ u.group.name
 #=> "primary_group"
 
 # Whether user is in group called "group15"
-u.has_group? "group15"
+u.in_group? "group15"
 #=> false
 
 # Use it in a string
