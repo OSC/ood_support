@@ -49,6 +49,33 @@ module OodSupport
       groups.first
     end
 
+    # The comparison operator for sorting values
+    # @param another_user [User] user to compare against
+    # @return [Fixnum] how users compare
+    def <=>(another_user)
+      name <=> another_user.name
+    end
+
+    # Boolean evaluation of object equality
+    # @param another_user [User] user to compare against
+    # @return [Boolean] whether user names are same
+    def ==(another_user)
+      name == another_user.name
+    end
+
+    # Boolean evaluation of object equality
+    # @param another_user [User] user to compare against
+    # @return [Boolean] whether user names are same
+    def eql?(another_user)
+      name == another_user.name
+    end
+
+    # Generates a hash value for this object from user name
+    # @return [Fixnum] hash value of object
+    def hash
+      name.hash
+    end
+
     # Convert object to string using user name as string value
     # @return [String] the user name
     def to_s
