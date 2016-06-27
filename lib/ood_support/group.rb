@@ -12,7 +12,7 @@ module OodSupport
     attr_reader :name
 
     # @param group [Fixnum, #to_s] the group id or name
-    def initialize(group)
+    def initialize(group = Process.group)
       if group.is_a?(Fixnum)
         @id = group
         @name = Etc.getgrgid(group).name

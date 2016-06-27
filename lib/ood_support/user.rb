@@ -31,7 +31,7 @@ module OodSupport
     attr_reader :groups
 
     # @param user [Fixnum, #to_s] user id or name
-    def initialize(user = ::Process.uid)
+    def initialize(user = Process.user)
       @passwd = user.is_a?(Fixnum) ? Etc.getpwuid(user) : Etc.getpwnam(user.to_s)
       @groups = get_groups
     end
