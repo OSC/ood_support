@@ -18,5 +18,11 @@ module OodSupport
     def self.groups
       ::Process.groups.map {|g| Group.new g}
     end
+
+    # Whether user's groups changed since running process
+    # @return [Boolean] whether groups changed
+    def self.groups_changed?
+      groups.sort != user.groups.sort
+    end
   end
 end
