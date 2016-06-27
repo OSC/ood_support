@@ -117,10 +117,10 @@ another `OodSupport::Group` object, or from the running process:
 ```ruby
 require 'ood_support'
 
-# Generate OodSupport::Group object from user name
+# Generate OodSupport::Group object from group name
 g1 = OodSupport::Group.new 'group1'
 
-# Generate OodSupport::Group object from user id
+# Generate OodSupport::Group object from group id
 g2 = OodSupport::Group.new 100
 
 # Generate OodSupport::Group object from another object
