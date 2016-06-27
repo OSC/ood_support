@@ -15,10 +15,10 @@ module OodSupport
     def initialize(group = Process.group)
       if group.is_a?(Fixnum)
         @id = group
-        @name = Etc.getgrgid(group).name
+        @name = Etc.getgrgid(@id).name
       else
-        @name = group
-        @id = Etc.getgrnam(group.to_s).gid
+        @name = group.to_s
+        @id = Etc.getgrnam(@name).gid
       end
     end
 
