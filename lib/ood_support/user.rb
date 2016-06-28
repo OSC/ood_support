@@ -5,6 +5,8 @@ module OodSupport
   # A helper object used to query information about a system user from the
   # local host
   class User
+    include Comparable
+
     extend Forwardable
 
     # @!method name
@@ -50,30 +52,18 @@ module OodSupport
     end
 
     # The comparison operator for sorting values
-    # @param another_user [User] user to compare against
+    # @param other [User] user to compare against
     # @return [Fixnum] how users compare
-    def <=>(another_user)
-      name <=> another_user.name
+    def <=>(other)
+      name <=> other
     end
 
-    # Boolean evaluation of object equality
-    # @param another_user [User] user to compare against
-    # @return [Boolean] whether user names are same
-    def ==(another_user)
-      id == another_user.id
-    end
-
-    # Boolean evaluation of object equality
-    # @param another_user [User] user to compare against
-    # @return [Boolean] whether user names are same
-    def eql?(another_user)
-      self == another_user
-    end
+    alias_method :eql?, :==
 
     # Generates a hash value for this object
     # @return [Fixnum] hash value of object
     def hash
-      id.hash
+      name.hash
     end
 
     # Convert object to string using user name as string value

@@ -3,6 +3,8 @@ require 'etc'
 module OodSupport
   # A helper object describing a Unix group's details
   class Group
+    include Comparable
+
     # The id of the group
     # @return [Fixnum] the group id
     attr_reader :id
@@ -23,30 +25,18 @@ module OodSupport
     end
 
     # The comparison operator for sorting values
-    # @param another_group [Group] group to compare against
+    # @param other [Group] group to compare against
     # @return [Fixnum] how groups compare
-    def <=>(another_group)
-      name <=> another_group.name
+    def <=>(other)
+      name <=> other
     end
 
-    # Boolean evaluation of object equality
-    # @param another_group [Group] group to compare against
-    # @return [Boolean] whether group names are same
-    def ==(another_group)
-      id == another_group.id
-    end
-
-    # Boolean evaluation of object equality
-    # @param another_group [Group] group to compare against
-    # @return [Boolean] whether group names are same
-    def eql?(another_group)
-      self == another_group
-    end
+    alias_method :eql?, :==
 
     # Generates a hash value for this object
     # @return [Fixnum] hash value of object
     def hash
-      id.hash
+      name.hash
     end
 
     # Convert object to string using group name as string value
