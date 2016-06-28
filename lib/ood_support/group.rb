@@ -31,12 +31,18 @@ module OodSupport
       name <=> other
     end
 
-    alias_method :eql?, :==
+    # Checks whether two Group objects have the same group as well as that the
+    # object is in the Group class
+    # @param other [Group] group to compare against
+    # @return [Boolean] whether same objects
+    def eql?(other)
+      other.is_a?(Group) && id == other.id
+    end
 
     # Generates a hash value for this object
     # @return [Fixnum] hash value of object
     def hash
-      name.hash
+      id.hash
     end
 
     # Convert object to string using group name as string value

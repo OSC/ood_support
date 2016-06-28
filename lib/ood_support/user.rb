@@ -58,12 +58,18 @@ module OodSupport
       name <=> other
     end
 
-    alias_method :eql?, :==
+    # Checks whether two User objects have the same user as well as that the
+    # object is in the User class
+    # @param other [User] user to compare against
+    # @return [Boolean] whether same objects
+    def eql?(other)
+      other.is_a?(User) && id == other.id
+    end
 
     # Generates a hash value for this object
     # @return [Fixnum] hash value of object
     def hash
-      name.hash
+      id.hash
     end
 
     # Convert object to string using user name as string value
