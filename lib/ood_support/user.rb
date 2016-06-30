@@ -28,14 +28,9 @@ module OodSupport
 
     alias_method :id, :uid
 
-    # List of all groups that user belongs to
-    # @return [Array<String>] list of groups user is in
-    attr_reader :groups
-
     # @param user [Fixnum, #to_s] user id or name
     def initialize(user = Process.user)
       @passwd = user.is_a?(Fixnum) ? Etc.getpwuid(user) : Etc.getpwnam(user.to_s)
-      @groups = get_groups
     end
 
     # Determine whether user is part of specified group
@@ -49,6 +44,12 @@ module OodSupport
     # @return [Group] primary group of user
     def group
       groups.first
+    end
+
+    # List of all groups that user belongs to
+    # @return [Array<String>] list of groups user is in
+    def groups
+      @groups ||= get_groups
     end
 
     # The comparison operator for sorting values
