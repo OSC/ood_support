@@ -2,8 +2,12 @@ require 'ood_support/version'
 require 'ood_support/user'
 require 'ood_support/group'
 require 'ood_support/process'
+require 'ood_support/acl'
+require 'ood_support/acl_entry'
 
 # The main namespace for ood_support
 module OodSupport
-  # Your code goes here...
+  # A namespace to hold all subclasses of {ACL} and {ACLEntry}
+  module ACLs
+  end
 end
