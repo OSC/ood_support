@@ -9,5 +9,6 @@ require 'ood_support/acl_entry'
 module OodSupport
   # A namespace to hold all subclasses of {ACL} and {ACLEntry}
   module ACLs
+    require 'ood_support/acls/nfs4'
   end
 end

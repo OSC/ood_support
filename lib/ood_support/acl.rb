@@ -22,6 +22,7 @@ module OodSupport
     end
 
     # Check if queried principle has access to resource
+    # @param principle [String] principle to check against
     # @return [Boolean] does principle have access?
     def allow?(principle:)
       # Check in array order
@@ -71,6 +72,7 @@ module OodSupport
 
       # Add a `to_s` method to the entries list
       def add_entries_string_method
+        # Convert list of entries to string
         def @entries.to_s
           join("\n")
         end
