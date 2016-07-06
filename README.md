@@ -156,6 +156,26 @@ OodSupport::Process.groups_changed?
 #=> false
 ```
 
+### ACLs
+
+#### NFSv4 fACL
+
+Allows reading and writing of NFSv4 file ACL permissions. To access a file's
+ACL:
+
+```ruby
+# Get file ACL
+acl = OodSupport::ACLs::Nfs4ACL.get_facl path: "/path/to/file"
+
+# Check if user has read access to file
+acl.allow? principle: OodSupport::User.new("user1"), permission: :r
+#=> true
+
+# Check if group has write access to file
+acl.allow? principle: OodSupport::Group.new("group1"), permission: :w
+#=> false
+```
+
 ## Contributing
 
 1. Fork it ( https://github.com/[my-github-username]/ood_support/fork )
