@@ -1,7 +1,15 @@
+require 'open3'
+
 module OodSupport
   module ACLs
     # Object describing an NFSv4 ACL
     class Nfs4ACL < ACL
+      # The binary used to get the file ACLs
+      GET_FACL_BIN = 'nfs4_getfacl'
+
+      # The binary used to set the file ACLs
+      SET_FACL_BIN = 'nfs4_setfacl'
+
       # Name of owner for this ACL
       # @return [String] owner name
       attr_reader :owner
@@ -11,23 +19,26 @@ module OodSupport
       attr_reader :group
 
       # Get ACL from file path
-      # @param file [String] path to file
-      def self.get_facl(file:)
-        path = Pathname.new file
+      # @param path [String] path to file or directory
+      # @raise [InvalidPath] file path doesn't exist
+      # @raise [BadExitCode] the command line called exited with non-zero status
+      # @return [Nfs4ACL] acl generated from path
+      def self.get_facl(path:)
+        path = Pathname.new path
+        raise InvalidPath, "invalid path: #{path}" unless path.exist?
         stat = path.stat
-        owner = User.new(stat.uid)
-        group = Group.new(stat.gid)
-        entries = `nfs4_getfacl #{file}`
-        new(entries: entries, owner: owner, group: group)
+        acl, err, s = Open3.capture3(GET_FACL_BIN, path.to_s)
+        raise BadExitCode, err unless s.success?
+        parse(acl, owner: User.new(stat.uid), group: Group.new(stat.gid))
       end
 
       # @param owner [#to_s] name of owner
       # @param group [#to_s] name of group
       # @see ACL#initialize
       def initialize(owner:, group:, **kwargs)
+        super(kwargs.merge(default: false))
         @owner = owner.to_s
         @group = group.to_s
-        super(kwargs.merge(default: false))
       end
 
       # Check if queried principle has access to resource
@@ -39,9 +50,15 @@ module OodSupport
         ordered_check(principle: principle, permission: permission, owner: owner, group: group)
       end
 
+      # Convert object to hash
+      # @return [Hash] the hash describing this object
+      def to_h
+        super.merge owner: owner, group: group
+      end
+
       private
         # Use Nfs4Entry for entry objects
-        def entry_class
+        def self.entry_class
           Nfs4Entry
         end
     end
@@ -106,9 +123,10 @@ module OodSupport
       # @param permission [#to_sym] requested permission
       # @param owner [String] owner of corresponding ACL
       # @param group [String] owning group of corresponding ACL
+      # @raise [ArgumentError] principle isn't {User} or {Group} object
       # @return [Boolean] does this match this entry
       def match(principle:, permission:, owner:, group:)
-        raise StandardError if !principle.is_a?(User) && !principle.is_a?(Group)
+        raise ArgumentError, "principle must be User or Group object" if (!principle.is_a?(User) && !principle.is_a?(Group))
         this_principle = self.principle
         this_principle = owner     if self.principle == "OWNER"
         this_principle = group     if self.principle == "GROUP"
@@ -146,7 +164,7 @@ module OodSupport
               permissions: m[:permissions].chars
             }
           end
-          entry ? entry : raise(StandardError)
+          entry ? entry : raise(InvalidACLEntry, "invalid entry: #{entry}")
         end
     end
   end

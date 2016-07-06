@@ -1,4 +1,5 @@
 require 'ood_support/version'
+require 'ood_support/errors'
 require 'ood_support/user'
 require 'ood_support/group'
 require 'ood_support/process'
