@@ -32,6 +32,63 @@ module OodSupport
         parse(acl, owner: User.new(stat.uid), group: Group.new(stat.gid))
       end
 
+      # Add ACL to file path
+      # @param path [String] path to file or directory
+      # @param entry [Nfs4Entry] entry to add to file
+      # @raise [InvalidPath] file path doesn't exist
+      # @raise [BadExitCode] the command line called exited with non-zero status
+      # @return [Nfs4ACL] new acl of path
+      def self.add_facl(path:, entry:)
+        path = Pathname.new path
+        raise InvalidPath, "invalid path: #{path}" unless path.exist?
+        _, err, s = Open3.capture3(SET_FACL_BIN, '-a', entry.to_s, path.to_s)
+        raise BadExitCode, err unless s.success?
+        get_facl(path: path)
+      end
+
+      # Remove ACL from file path
+      # @param path [String] path to file or directory
+      # @param entry [Nfs4Entry] entry to remove from file
+      # @raise [InvalidPath] file path doesn't exist
+      # @raise [BadExitCode] the command line called exited with non-zero status
+      # @return [Nfs4ACL] new acl of path
+      def self.rem_facl(path:, entry:)
+        path = Pathname.new path
+        raise InvalidPath, "invalid path: #{path}" unless path.exist?
+        _, err, s = Open3.capture3(SET_FACL_BIN, '-x', entry.to_s, path.to_s)
+        raise BadExitCode, err unless s.success?
+        get_facl(path: path)
+      end
+
+      # Modify in-place an entry for file path
+      # @param path [String] path to file or directory
+      # @param entry [Nfs4Entry] entry to modify in-place in file
+      # @param new_entry [Nfs4Entry] new entry to be replaced with
+      # @raise [InvalidPath] file path doesn't exist
+      # @raise [BadExitCode] the command line called exited with non-zero status
+      # @return [Nfs4ACL] new acl of path
+      def self.mod_facl(path:, entry:, new_entry:)
+        path = Pathname.new path
+        raise InvalidPath, "invalid path: #{path}" unless path.exist?
+        _, err, s = Open3.capture3(SET_FACL_BIN, '-m', entry.to_s, new_entry.to_s, path.to_s)
+        raise BadExitCode, err unless s.success?
+        get_facl(path: path)
+      end
+
+      # Set ACL (overwrites original) for file path
+      # @param path [String] path to file or directory
+      # @param acl [Nfs4ACL] ACL to overwrite original with
+      # @raise [InvalidPath] file path doesn't exist
+      # @raise [BadExitCode] the command line called exited with non-zero status
+      # @return [Nfs4ACL] new acl of path
+      def self.set_facl(path:, acl:)
+        path = Pathname.new path
+        raise InvalidPath, "invalid path: #{path}" unless path.exist?
+        _, err, s = Open3.capture3(SET_FACL_BIN, '-s', acl.to_s, path.to_s)
+        raise BadExitCode, err unless s.success?
+        get_facl(path: path)
+      end
+
       # @param owner [#to_s] name of owner
       # @param group [#to_s] name of group
       # @see ACL#initialize
