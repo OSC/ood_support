@@ -190,7 +190,7 @@ module OodSupport
         this_principle = principle if self.principle == "EVERYONE"
         if principle.is_a?(User) && group_entry?
           principle.groups.include?(this_principle) && permissions.include?(permission.to_sym)
-        elsif principle.is_a?(User) || (principle.is_a?(Group) && group_entry?)
+        elsif principle.is_a?(User) || (principle.is_a?(Group) && group_entry?) || self.principle == "EVERYONE"
           principle == this_principle && permissions.include?(permission.to_sym)
         else
           false
