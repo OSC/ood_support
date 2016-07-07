@@ -62,15 +62,15 @@ module OodSupport
 
       # Modify in-place an entry for file path
       # @param path [String] path to file or directory
-      # @param entry [Nfs4Entry] entry to modify in-place in file
+      # @param old_entry [Nfs4Entry] old entry to modify in-place in file
       # @param new_entry [Nfs4Entry] new entry to be replaced with
       # @raise [InvalidPath] file path doesn't exist
       # @raise [BadExitCode] the command line called exited with non-zero status
       # @return [Nfs4ACL] new acl of path
-      def self.mod_facl(path:, entry:, new_entry:)
+      def self.mod_facl(path:, old_entry:, new_entry:)
         path = Pathname.new path
         raise InvalidPath, "invalid path: #{path}" unless path.exist?
-        _, err, s = Open3.capture3(SET_FACL_BIN, '-m', entry.to_s, new_entry.to_s, path.to_s)
+        _, err, s = Open3.capture3(SET_FACL_BIN, '-m', old_entry.to_s, new_entry.to_s, path.to_s)
         raise BadExitCode, err unless s.success?
         get_facl(path: path)
       end
