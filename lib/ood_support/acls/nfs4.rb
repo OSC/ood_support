@@ -185,6 +185,7 @@ module OodSupport
       def match(principle:, permission:, owner:, group:)
         raise ArgumentError, "principle must be User or Group object" if (!principle.is_a?(User) && !principle.is_a?(Group))
         return false unless permissions.include?(permission.to_sym)
+        # Ignore domain, I don't want or care to check for domain matches
         p = self.principle
         p = owner if user_owner_entry?
         p = group if group_owner_entry?
