@@ -166,15 +166,15 @@ To access a file's ACL:
 
 ```ruby
 # Get file ACL
-acl = OodSupport::ACLs::Nfs4ACL.get_facl path: "/path/to/file"
+acl = OodSupport::ACLs::Nfs4ACL.get_facl(path: "/path/to/file")
 
 # Check if user has read access to file
-acl.allow? principle: OodSupport::User.new("user1"), permission: :r
+acl.allow?(principle: OodSupport::User.new("user1"), permission: :r)
 #=> true
 
 # Check if group has write access to file
 # NB: A user of this group may *actually* have access to write to this file
-acl.allow? principle: OodSupport::Group.new("group1"), permission: :w
+acl.allow?(principle: OodSupport::Group.new("group1"), permission: :w)
 #=> false
 ```
 
@@ -185,13 +185,13 @@ To add an ACL permission to a file:
 entry = OodSupport::ACLs::Nfs4Entry.new(type: :A, flags: [], principle: "user2", domain: "osc.edu", permissions: [:r, :w])
 
 # or you can pass it a properly formatted string...
-entry = OodSupport::ACLs::Nfs4Entry.parse "A::user2@osc.edu:rw"
+entry = OodSupport::ACLs::Nfs4Entry.parse("A::user2@osc.edu:rw")
 
 # Add this entry to the file ACLs
-acl = OodSupport::ACLs::Nfs4ACL.add_facl path: "/path/to/file", entry: entry
+acl = OodSupport::ACLs::Nfs4ACL.add_facl(path: "/path/to/file", entry: entry)
 
 # Check that this added entry changes access
-acl.allow? principle: OodSupport::User.new("user2"), permission: :r
+acl.allow?(principle: OodSupport::User.new("user2"), permission: :r)
 #=> true
 ```
 
@@ -199,16 +199,16 @@ To remove an ACL permission from a file:
 
 ```ruby
 # Get file ACL
-acl = OodSupport::ACLs::Nfs4ACL.get_facl path: "/path/to/file"
+acl = OodSupport::ACLs::Nfs4ACL.get_facl(path: "/path/to/file")
 
 # Choose the entry we want to remove from the array of entries
 entry = acl.entries.first
 
 # Remove this entry from the file
-new_acl = OodSupport::ACLs::Nfs4ACL.rem_facl path: "/path/to/file", entry: entry
+new_acl = OodSupport::ACLs::Nfs4ACL.rem_facl(path: "/path/to/file", entry: entry)
 
 # Check that this entry removal changes access
-new_acl.allow? principle: OodSupport::User.new("user2"), permission: :r
+new_acl.allow?(principle: OodSupport::User.new("user2"), permission: :r)
 #=> false
 ```
 
@@ -234,6 +234,78 @@ Nfs4ACL::mod_facl(path: p, old_entry: e1, new_entry: e2)
 Nfs4ACL::set_facl(path: p, acl: a)
 ```
 
+#### Posix File ACLs
+
+Allows reading and writing of Posix file ACL permissions.
+
+To access a file's ACL:
+
+```ruby
+# Get file ACL
+acl = OodSupport::ACLs::PosixACL.get_facl path: "/path/to/file"
+
+# Check if user has read access to file
+acl.allow?(principle: OodSupport::User.new("user1"), permission: :r)
+#=> true
+
+# Check if group has write access to file
+# NB: A user of this group may *actually* have access to write to this file
+acl.allow?(principle: OodSupport::Group.new("group1"), permission: :w)
+#=> false
+```
+
+To add an ACL permission to a file:
+
+```ruby
+# Create a new ACL entry
+entry = OodSupport::ACLs::PosixEntry.new(flag: :user, principle: "user2", permissions: [:r, :w, :-])
+
+# or you can pass it a properly formatted string...
+entry = OodSupport::ACLs::PosixEntry.parse("user:user2:rw-")
+
+# Add this entry to the file ACLs
+acl = OodSupport::ACLs::PosixACL.add_facl(path: "/path/to/file", entry: entry)
+
+# Check that this added entry changes access
+acl.allow?(principle: OodSupport::User.new("user2"), permission: :r)
+#=> true
+```
+
+To remove an ACL permission from a file:
+
+```ruby
+# Get file ACL
+acl = OodSupport::ACLs::PosixACL.get_facl(path: "/path/to/file")
+
+# Choose the entry we want to remove from the array of entries
+entry = acl.entries.detect {|e| e.user_entry? && e.principle == "user2"}
+
+# Remove this entry from the file
+new_acl = OodSupport::ACLs::PosixACL.rem_facl(path: "/path/to/file", entry: entry)
+
+# Check that this entry removal changes access
+new_acl.allow?(principle: OodSupport::User.new("user2"), permission: :r)
+#=> false
+```
+
+##### File ACL Methods
+
+List of class methods on the `PosixACL` object used to access/modify a file's
+ACL. For all class methods an `PosixACL` object is created and returned.
+
+```ruby
+# Get the file/directory ACLs for a given path
+PosixACL::get_facl(path: p)
+
+# Add an ACL entry to the given file/directory ACLs
+PosixACL::add_facl(path: p, entry: e)
+
+# Remove an ACL entry from the given file/directory ACLs
+PosixACL::rem_facl(path: p, entry: e)
+
+# Clear all extended ACLs for the given file/directory
+PosixACL::clear_facl(path: p)
+```
 ## Contributing
 
 1. Fork it ( https://github.com/[my-github-username]/ood_support/fork )
