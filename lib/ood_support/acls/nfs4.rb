@@ -184,23 +184,49 @@ module OodSupport
       # @return [Boolean] does this match this entry
       def match(principle:, permission:, owner:, group:)
         raise ArgumentError, "principle must be User or Group object" if (!principle.is_a?(User) && !principle.is_a?(Group))
-        this_principle = self.principle
-        this_principle = owner     if self.principle == "OWNER"
-        this_principle = group     if self.principle == "GROUP"
-        this_principle = principle if self.principle == "EVERYONE"
-        if principle.is_a?(User) && group_entry?
-          principle.groups.include?(this_principle) && permissions.include?(permission.to_sym)
-        elsif principle.is_a?(User) || (principle.is_a?(Group) && group_entry?) || self.principle == "EVERYONE"
-          principle == this_principle && permissions.include?(permission.to_sym)
+        return false unless permissions.include?(permission.to_sym)
+        p = self.principle
+        p = owner if user_owner_entry?
+        p = group if group_owner_entry?
+        if (principle.is_a?(User) && group_entry?)
+          principle.groups.include?(p)
+        elsif (principle.is_a?(User) && user_entry?) || (principle.is_a?(Group) && group_entry?)
+          principle == p
+        elsif other_entry?
+          true
         else
           false
         end
+      end
+
+      # Is this a user-specific ACL entry
+      # @return [Boolean] is this a user entry
+      def user_entry?
+        !group_entry? && !other_entry?
       end
 
       # Is this a group-specific ACL entry
       # @return [Boolean] is this a group entry
       def group_entry?
         flags.include? :g
+      end
+
+      # Is this an other-specific ACL entry
+      # @return [Boolean] is this an other entry
+      def other_entry?
+        principle == "EVERYONE"
+      end
+
+      # Is this the owner ACL entry
+      # @return [Boolean] is this the owner entry
+      def user_owner_entry?
+        user_entry? && principle == "OWNER"
+      end
+
+      # Is this the owning group ACL entry
+      # @return [Boolean] is this the owning group entry
+      def group_owner_entry?
+        group_entry? && principle == "GROUP"
       end
 
       # Convert object to string
