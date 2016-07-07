@@ -182,7 +182,7 @@ To add an ACL permission to a file:
 
 ```ruby
 # Create a new ACL entry
-entry = OodSupport::ACLs::Nfs4Entry.new(type: :A, flags: [], principle: "user2", domain: "osc.edu", permission: [:r, :w])
+entry = OodSupport::ACLs::Nfs4Entry.new(type: :A, flags: [], principle: "user2", domain: "osc.edu", permissions: [:r, :w])
 
 # or you can pass it a properly formatted string...
 entry = OodSupport::ACLs::Nfs4Entry.parse "A::user2@osc.edu:rw"
