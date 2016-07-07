@@ -238,7 +238,7 @@ module OodSupport
       private
         # Parse an entry string into input parameters
         def self.parse_entry(entry)
-          entry = REGEX_PATTERN.match(entry.to_s.strip) do |m|
+          e = REGEX_PATTERN.match(entry.to_s.strip) do |m|
             {
               type:        m[:type],
               flags:       m[:flags].chars,
@@ -247,7 +247,7 @@ module OodSupport
               permissions: m[:permissions].chars
             }
           end
-          entry ? entry : raise(InvalidACLEntry, "invalid entry: #{entry}")
+          e ? e : raise(InvalidACLEntry, "invalid entry: #{entry}")
         end
     end
   end
