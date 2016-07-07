@@ -214,7 +214,8 @@ new_acl.allow? principle: OodSupport::User.new("user2"), permission: :r
 
 ##### File ACL Methods
 
-List of class methods on the `Nfs4ACL` object used to create an ACL object.
+List of class methods on the `Nfs4ACL` object used to access/modify a file's
+ACL. For all class methods an `Nfs4ACL` object is created and returned.
 
 ```ruby
 # Get the file/directory ACLs for a given path
