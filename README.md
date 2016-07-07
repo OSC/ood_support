@@ -212,6 +212,27 @@ new_acl.allow? principle: OodSupport::User.new("user2"), permission: :r
 #=> false
 ```
 
+##### File ACL Methods
+
+List of class methods on the `Nfs4ACL` object used to create an ACL object.
+
+```ruby
+# Get the file/directory ACLs for a given path
+Nfs4ACL::get_facl(path: p)
+
+# Add an ACL entry to the given file/directory ACLs
+Nfs4ACL::add_facl(path: p, entry: e)
+
+# Remove an ACL entry from the given file/directory ACLs
+Nfs4ACL::rem_facl(path: p, entry: e)
+
+# Modify in-place an ACL entry from the given file/directory ACLs
+Nfs4ACL::mod_facl(path: p, old_entry: e1, new_entry: e2)
+
+# Set the whole ACL (overwrites original) for a given file/directory
+Nfs4ACL::set_facl(path: p, acl: a)
+```
+
 ## Contributing
 
 1. Fork it ( https://github.com/[my-github-username]/ood_support/fork )
