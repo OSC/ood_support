@@ -173,7 +173,7 @@ acl.allow? principle: OodSupport::User.new("user1"), permission: :r
 #=> true
 
 # Check if group has write access to file
-# NB: A user of this group may not have access to write to this file
+# NB: A user of this group may *actually* have access to write to this file
 acl.allow? principle: OodSupport::Group.new("group1"), permission: :w
 #=> false
 ```
