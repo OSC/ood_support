@@ -158,10 +158,11 @@ OodSupport::Process.groups_changed?
 
 ### ACLs
 
-#### NFSv4 fACL
+#### NFSv4 File ACLs
 
-Allows reading and writing of NFSv4 file ACL permissions. To access a file's
-ACL:
+Allows reading and writing of NFSv4 file ACL permissions.
+
+To access a file's ACL:
 
 ```ruby
 # Get file ACL
@@ -172,7 +173,42 @@ acl.allow? principle: OodSupport::User.new("user1"), permission: :r
 #=> true
 
 # Check if group has write access to file
+# NB: A user of this group may not have access to write to this file
 acl.allow? principle: OodSupport::Group.new("group1"), permission: :w
+#=> false
+```
+
+To add an ACL permission to a file:
+
+```ruby
+# Create a new ACL entry
+entry = OodSupport::ACLs::Nfs4Entry.new(type: :A, flags: [], principle: "user2", domain: "osc.edu", permission: [:r, :w])
+
+# or you can pass it a properly formatted string...
+entry = OodSupport::ACLs::Nfs4Entry.parse "A::user2@osc.edu:rw"
+
+# Add this entry to the file ACLs
+acl = OodSupport::ACLs::Nfs4ACL.add_facl path: "/path/to/file", entry: entry
+
+# Check that this added entry changes access
+acl.allow? principle: OodSupport::User.new("user2"), permission: :r
+#=> true
+```
+
+To remove an ACL permission from a file:
+
+```ruby
+# Get file ACL
+acl = OodSupport::ACLs::Nfs4ACL.get_facl path: "/path/to/file"
+
+# Choose the entry we want to remove from the array of entries
+entry = acl.entries.first
+
+# Remove this entry from the file
+new_acl = OodSupport::ACLs::Nfs4ACL.rem_facl path: "/path/to/file", entry: entry
+
+# Check that this entry removal changes access
+new_acl.allow? principle: OodSupport::User.new("user2"), permission: :r
 #=> false
 ```
 
