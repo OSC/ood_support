@@ -171,7 +171,7 @@ module OodSupport
       # @param flag [#to_sym] flag for entry
       # @param permissions [Array<#to_sym>] list of permissions for entry
       # @see ACLEntry#initialize
-      def initialize(default:, flag:, permissions:, **kwargs)
+      def initialize(default: false, flag:, permissions:, **kwargs)
         @default = default
         @flag = flag.to_sym
         @permissions = permissions.map(&:to_sym)
