@@ -176,15 +176,15 @@ module OodSupport
       end
 
       # Do the requested args match this ACL entry?
-      # @param principle [User, Group] requested principle
+      # @param principle [User, Group, #to_s] requested principle
       # @param permission [#to_sym] requested permission
       # @param owner [String] owner of corresponding ACL
       # @param group [String] owning group of corresponding ACL
       # @raise [ArgumentError] principle isn't {User} or {Group} object
       # @return [Boolean] does this match this entry
       def match(principle:, permission:, owner:, group:)
-        raise ArgumentError, "principle must be User or Group object" if (!principle.is_a?(User) && !principle.is_a?(Group))
-        return false unless permissions.include?(permission.to_sym)
+        principle = User.new(principle) if (!principle.is_a?(User) && !principle.is_a?(Group))
+        return false unless has_permission?(permission: permission)
         # Ignore domain, I don't want or care to check for domain matches
         p = self.principle
         p = owner if user_owner_entry?
@@ -228,6 +228,13 @@ module OodSupport
       # @return [Boolean] is this the owning group entry
       def group_owner_entry?
         group_entry? && principle == "GROUP"
+      end
+
+      # Does this entry have the requested permission
+      # @param permission [#to_sym] the requested permission
+      # @return [Boolean] found this permission
+      def has_permission?(permission:)
+        permissions.include? permission.to_sym
       end
 
       # Convert object to string

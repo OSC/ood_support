@@ -179,13 +179,13 @@ module OodSupport
       end
 
       # Do the requested args match this ACL entry?
-      # @param principle [User, Group] requested principle
+      # @param principle [User, Group, #to_s] requested principle
       # @param owner [String] owner of corresponding ACL
       # @param group [String] owning group of corresponding ACL
       # @raise [ArgumentError] principle isn't {User} or {Group} object
       # @return [Boolean] does this match this entry
       def match(principle:, owner:, group:)
-        raise ArgumentError, "principle must be User or Group object" if (!principle.is_a?(User) && !principle.is_a?(Group))
+        principle = User.new(principle) if (!principle.is_a?(User) && !principle.is_a?(Group))
         return false if default_entry?
         p = self.principle
         p = owner if user_owner_entry?
