@@ -53,7 +53,7 @@ module OodSupport
     end
 
     # The comparison operator for sorting values
-    # @param other [User] user to compare against
+    # @param other [#to_s] user to compare against
     # @return [Fixnum] how users compare
     def <=>(other)
       name <=> other
@@ -64,13 +64,13 @@ module OodSupport
     # @param other [User] user to compare against
     # @return [Boolean] whether same objects
     def eql?(other)
-      other.is_a?(User) && id == other.id
+      self.class == other.class && self == other
     end
 
     # Generates a hash value for this object
     # @return [Fixnum] hash value of object
     def hash
-      id.hash
+      [self.class, name].hash
     end
 
     # Convert object to string using user name as string value
