@@ -28,6 +28,8 @@ module OodSupport
 
     alias_method :id, :uid
 
+    alias_method :home, :dir
+
     # @param user [Fixnum, #to_s] user id or name
     def initialize(user = Process.user)
       @passwd = user.is_a?(Fixnum) ? Etc.getpwuid(user) : Etc.getpwnam(user.to_s)
@@ -39,6 +41,8 @@ module OodSupport
     def in_group?(group)
       groups.include? Group.new(group)
     end
+
+    alias_method :member_of_group?, :in_group?
 
     # Provide primary group of user
     # @return [Group] primary group of user
