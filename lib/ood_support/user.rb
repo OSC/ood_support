@@ -51,7 +51,7 @@ module OodSupport
     end
 
     # List of all groups that user belongs to
-    # @return [Array<String>] list of groups user is in
+    # @return [Array<Group>] list of groups user is in
     def groups
       @groups ||= get_groups
     end
