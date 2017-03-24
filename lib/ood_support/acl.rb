@@ -21,7 +21,7 @@ module OodSupport
       new(entries: entries, **kwargs)
     end
 
-    # @param entries [#to_s] list of entries
+    # @param entries [Array<ACLEntry>] list of entries
     # @param default [Boolean] default allow, otherwise deny
     def initialize(entries:, default: false)
       @entries = entries
