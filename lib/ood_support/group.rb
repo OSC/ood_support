@@ -6,16 +6,16 @@ module OodSupport
     include Comparable
 
     # The id of the group
-    # @return [Fixnum] the group id
+    # @return [Integer] the group id
     attr_reader :id
 
     # The name of the group
     # @return [String] the group name
     attr_reader :name
 
-    # @param group [Fixnum, #to_s] the group id or name
+    # @param group [Integer, #to_s] the group id or name
     def initialize(group = Process.group)
-      if group.is_a?(Fixnum)
+      if group.is_a?(Integer)
         @id = group
         @name = Etc.getgrgid(@id).name
       else
@@ -26,7 +26,7 @@ module OodSupport
 
     # The comparison operator for sorting values
     # @param other [#to_s] group to compare against
-    # @return [Fixnum] how groups compare
+    # @return [Integer] how groups compare
     def <=>(other)
       name <=> other
     end
@@ -40,7 +40,7 @@ module OodSupport
     end
 
     # Generates a hash value for this object
-    # @return [Fixnum] hash value of object
+    # @return [Integer] hash value of object
     def hash
       [self.class, name].hash
     end

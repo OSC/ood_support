@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Updated the CHANGELOG formatting.
   [#3](https://github.com/OSC/ood_support/issues/3)
 
+### Fixed
+- Added support for Ruby 2.4 by replacing deprecated `Fixnum` with `Integer`.
+  [#4](https://github.com/OSC/ood_support/issues/4)
+
 ## [0.0.2] - 2016-08-26
 ### Fixed
 - Added aliases `User#home` and `User#member_of_group?` for backwards

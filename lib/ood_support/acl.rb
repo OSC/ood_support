@@ -63,7 +63,7 @@ module OodSupport
     end
 
     # Generates a hash value for this object
-    # @return [Fixnum] hash value of object
+    # @return [Integer] hash value of object
     def hash
       [self.class, to_h].hash
     end

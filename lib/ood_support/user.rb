@@ -30,9 +30,9 @@ module OodSupport
 
     alias_method :home, :dir
 
-    # @param user [Fixnum, #to_s] user id or name
+    # @param user [Integer, #to_s] user id or name
     def initialize(user = Process.user)
-      @passwd = user.is_a?(Fixnum) ? Etc.getpwuid(user) : Etc.getpwnam(user.to_s)
+      @passwd = user.is_a?(Integer) ? Etc.getpwuid(user) : Etc.getpwnam(user.to_s)
     end
 
     # Determine whether user is part of specified group
@@ -58,7 +58,7 @@ module OodSupport
 
     # The comparison operator for sorting values
     # @param other [#to_s] user to compare against
-    # @return [Fixnum] how users compare
+    # @return [Integer] how users compare
     def <=>(other)
       name <=> other
     end
@@ -72,7 +72,7 @@ module OodSupport
     end
 
     # Generates a hash value for this object
-    # @return [Fixnum] hash value of object
+    # @return [Integer] hash value of object
     def hash
       [self.class, name].hash
     end
