@@ -6,8 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Changed
-- Updated the CHANGELOG formatting.
+- Updated the `CHANGELOG.md` formatting.
   [#3](https://github.com/OSC/ood_support/issues/3)
+- Updated `LICENSE.txt` dates.
 
 ### Fixed
 - Added support for Ruby 2.4 by replacing deprecated `Fixnum` with `Integer`.
