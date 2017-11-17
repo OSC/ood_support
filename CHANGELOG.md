@@ -1,12 +1,22 @@
-## Unreleased
+# Changelog
+All notable changes to this project will be documented in this file.
 
-## 0.0.2 (2016-08-26)
+The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
+and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-Bugfixes:
+## [Unreleased]
+### Changed
+- Updated the CHANGELOG formatting.
+  [#3](https://github.com/OSC/ood_support/issues/3)
 
-  - added aliases `User#home` and `User#member_of_group?` for backwards
-    compatibility
+## [0.0.2] - 2016-08-26
+### Fixed
+- Added aliases `User#home` and `User#member_of_group?` for backwards
+  compatibility.
 
-## 0.0.1 (2016-07-01)
+## 0.0.1 - 2016-07-01
+### Added
+- Initial release!
 
-Initial release!
+[Unreleased]: https://github.com/OSC/ood_support/compare/v0.0.2...HEAD
+[0.0.2]: https://github.com/OSC/ood_support/compare/v0.0.1...v0.0.2
