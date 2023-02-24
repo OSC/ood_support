@@ -93,7 +93,7 @@ module OodSupport
       # @param group [#to_s] name of group
       # @see ACL#initialize
       def initialize(owner:, group:, **kwargs)
-        super(kwargs.merge(default: false))
+        super(**kwargs.merge(default: false))
         @owner = owner.to_s
         @group = group.to_s
       end
@@ -160,7 +160,7 @@ module OodSupport
         @flags = flags.map(&:to_sym)
         @domain = domain.to_s
         @permissions = permissions.map(&:to_sym)
-        super(kwargs)
+        super(**kwargs)
       end
 
       # Is this an "allow" ACL entry
