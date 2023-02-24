@@ -22,7 +22,7 @@ jobs:
         with:
           ruby-version: "2.7.1"
           bundler-cache: true
-          bundler: "2.1.4"
+          bundler: "2.2"
 
       - name: install gems
         run: bundle install
